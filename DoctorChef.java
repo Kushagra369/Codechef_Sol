@@ -4,111 +4,138 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 
-class DoctorChef {
+public class DoctorChef {
 
-	static class FastReader 
-	{
+	static class FastReader {
 		BufferedReader br;
 		StringTokenizer st;
 
-		public FastReader() 
-		{
+		public FastReader() {
 			br = new BufferedReader(new InputStreamReader(System.in));
 		}
 
-		String next() 
-		{
-			while (st == null || !st.hasMoreElements()) 
-			{
-				try 
-				{
+		String next() {
+			while (st == null || !st.hasMoreElements()) {
+				try {
 					st = new StringTokenizer(br.readLine());
-				} 
-				catch (IOException e) 
-				{
+				} catch (IOException e) {
 					e.printStackTrace();
 				}
 			}
 			return st.nextToken();
 		}
 
-		int nextInt() 
-		{
+		int nextInt() {
 			return Integer.parseInt(next());
 		}
 
-		long nextLong() 
-		{
+		long nextLong() {
 			return Long.parseLong(next());
 		}
 
-		double nextDouble()
-		{
+		double nextDouble() {
 			return Double.parseDouble(next());
 		}
 
-		String nextLine() 
-		{
+		String nextLine() {
 			String str = "";
-			try 
-			{
+			try {
 				str = br.readLine();
-			} 
-			catch (IOException e) 
-			{
+			} catch (IOException e) {
 				e.printStackTrace();
 			}
 			return str;
 		}
 	}
 	
-	public static void main(String[] args) 
-	{
+	public static void main(String[] args) {
 		FastReader sc = new FastReader();
 		int t = sc.nextInt();
 		while(t-->0)
 		{
 			int n = sc.nextInt();
-			int x = sc.nextInt();
-			List<Integer> more = new ArrayList<>();
+			long x = sc.nextLong();
+			long[] a= new long[n];
 			int days = 0;
 			
 			for(int i=0; i<n; i++)
 			{
-				int z = sc.nextInt();
-				more.add(z);
+				a[i] = sc.nextLong();
 			}
 			
-			if(more.get(0)<=x)
+			Arrays.sort(a);
+			
+			int lb=0;
+			for(int i=0;i<n; i++)
 			{
-				days = more.size();
-			}
-			else
-			{
-				int i = more.get(0);
-				int initpop = i;
-				while(i>0)
+				if(a[i]>=x)
 				{
-					if(x>i)
-					{
-						x = 2*x;
-						i = 0;
-						days++;
-					}
-					else
-					{
-						i = i-x;
-						x = 2*x;
-						days++;
-						if(i!=0)
-						{
-							i = Math.min(initpop, 2*i);
-						}
-					}
+					lb = i;
+					break;
 				}
-				days = days + (n-1);
 			}
-			System.out.println(days);
+			
+			if(x>=a[n-1])
+			{
+				System.out.println(n);
+			}
+			else 
+			{
+			
+			for(int i=lb; i<n; i++)
+		    {
+		    	if(x<a[i])
+		    	{
+		    		while(x<a[i])
+		    		{
+		    			x = 2*x;
+		    			days++;
+		    		}
+		    		days++;
+		    	}
+		    	else
+		    	{
+		    		days++;
+		    	}
+
+		    	x = 2*a[i];
+		    }	
+			
+			long total = lb + days;
+		    if(lb!=0)
+		    {
+		    	days=0;
+		    	lb--;
+		    	for(int i=lb; i<n; i++)
+		    	{
+		    		if(x<a[i])
+		    		{
+		    			while(x<a[i])
+		    			{
+		    				x = 2*x;
+		    				days++;
+		    			}
+		    			days++;
+		    		}
+		    		else
+		    		{
+		    			days++;
+		    		}
+
+			    	x = 2*a[i];
+		    	}
+		    	
+		    	long ans = Math.min(days+lb,total);
+		    	System.out.println(ans);
+		    }
+		    else
+		    {
+		    	System.out.println(total);
+		    }
+			
+			}
+			
 		}
 	}
+
 }
